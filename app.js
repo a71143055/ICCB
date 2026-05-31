@@ -2,10 +2,10 @@
  * Ideal Coffee Chat Blog (ICCB) - Core Application Controller
  * Features:
  * - Single Page Application (SPA) Routing
- * - Netlify Identity Widget & Local Mock Auth Bridge
+ * - Firebase Authentication & Local Mock Auth Bridge
  * - Interactive "Coffee Alchemist" Extraction Simulator
  * - Document Editor (Google Docs style) with Real-time Markdown Preview
- * - Local Python Server Sync & LocalStorage persistence fallback
+ * - GitHub Pages Deployment & Firebase Firestore persistence fallback
  */
 
 // ==========================================================================
@@ -206,9 +206,23 @@ async function checkLocalServerConnection() {
   await fetchDocuments();
 }
 
-// Fetch documents from Server API or fall back to local storage
+// Fetch documents from Firebase Firestore or fall back to local storage
 async function fetchDocuments() {
-  if (state.isLocalServer) {
+  if (db) {
+    try {
+      console.log("🔥 Fetching documents from Firestore...");
+      const snapshot = await db.collection('documents').get();
+      if (!snapshot.empty) {
+        state.documents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } else {
+        // If Firestore is empty, seed it with default data
+        state.documents = [...SEED_DOCUMENTS];
+      }
+    } catch (err) {
+      console.error("Firebase fetch failed, using fallback.", err);
+      loadFromLocalStorage();
+    }
+  } else if (state.isLocalServer) {
     try {
       const res = await fetch('/api/documents');
       state.documents = await res.json();
@@ -219,12 +233,12 @@ async function fetchDocuments() {
   } else {
     loadFromLocalStorage();
   }
-  
+
   // Render feed if looking at a category
   if (state.activeView === 'feed') {
     renderDocumentFeed();
   }
-  
+
   updateAuthorStats();
 }
 
@@ -239,9 +253,19 @@ function loadFromLocalStorage() {
   }
 }
 
-// Save document either to Python backend or LocalStorage
+// Save document either to Firebase, Python backend or LocalStorage
 async function saveDocument(newDoc) {
-  if (state.isLocalServer) {
+  if (db) {
+    try {
+      const docRef = await db.collection('documents').add(newDoc);
+      newDoc.id = docRef.id;
+      state.documents.push(newDoc);
+      showToast("💾 Firebase Firestore 클라우드 동기화 완료!", "success");
+    } catch (err) {
+      console.error("Firebase save failed. Saving locally.", err);
+      saveToLocalStorage(newDoc);
+    }
+  } else if (state.isLocalServer) {
     try {
       const res = await fetch('/api/documents', {
         method: 'POST',
@@ -285,37 +309,64 @@ function updateAuthorStats() {
 }
 
 // ==========================================================================
-// 4. NETLIFY IDENTITY & CUSTOM LOCAL AUTHENTICATION BRIDGE
+// 4. FIREBASE CONFIGURATION & AUTHENTICATION BRIDGE
 // ==========================================================================
+
+// NOTE TO DEVELOPER: To enable production Auth & Database, 
+// replace this config with your actual Firebase Project settings from console.firebase.google.com
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "your-project-id.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project-id.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase if config is provided, otherwise fallback to Mock
+let db = null;
+let auth = null;
+
+function initFirebase() {
+  if (firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY") {
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+      auth = firebase.auth();
+      console.log("🔒 Firebase initialized. Production Auth & Firestore active.");
+    } catch (e) {
+      console.error("Firebase initialization failed:", e);
+    }
+  } else {
+    console.warn("⚠️ Firebase keys missing. Running in 'GitHub Pages Offline Mock' mode.");
+  }
+}
+
 function initAuthentication() {
-  // Check if Netlify Identity Widget script loaded successfully
-  if (window.netlifyIdentity) {
-    console.log("🔒 Netlify Identity loaded. Activating production SSO logins.");
-    
-    // Bind Netlify Identity Events
-    netlifyIdentity.on('init', user => {
+  initFirebase();
+
+  if (auth) {
+    // Listen for Firebase Auth State Changes
+    auth.onAuthStateChanged(user => {
       if (user) {
-        handleUserLogin(user.email, user.user_metadata?.full_name || user.email, "Netlify User");
+        handleUserLogin(user.email, user.displayName || user.email.split('@')[0], "Certified Barista");
+      } else {
+        handleUserLogout();
       }
-    });
-    
-    netlifyIdentity.on('login', user => {
-      handleUserLogin(user.email, user.user_metadata?.full_name || user.email, "Netlify Alchemist");
-      netlifyIdentity.close();
-      showToast(`🔑 ${user.email} 로그인 성공 (Netlify)`, "success");
-    });
-    
-    netlifyIdentity.on('logout', () => {
-      handleUserLogout();
-      showToast("🔒 로그아웃 되었습니다.", "success");
     });
 
     DOM.loginBtn.addEventListener('click', () => {
-      netlifyIdentity.open();
+      if (state.user) {
+        auth.signOut().then(() => {
+          showToast("🔒 로그아웃 되었습니다.", "success");
+        });
+      } else {
+        openAuthModal();
+      }
     });
   } else {
     // FALLBACK: Elegant Mock Auth modal for local/standalone development
-    console.log("🔑 Offline Mode: Netlify Widget missing. Triggering Custom Mock Auth Bridge.");
+    console.log("🔑 Offline Mode: Firebase missing. Triggering Custom Mock Auth Bridge.");
     
     const localUser = localStorage.getItem('iccb_user');
     if (localUser) {
@@ -326,12 +377,13 @@ function initAuthentication() {
     DOM.loginBtn.addEventListener('click', () => {
       if (state.user) {
         handleUserLogout();
+        showToast("🔒 로그아웃 되었습니다.", "success");
       } else {
         openAuthModal();
       }
     });
     
-    initMockAuthModalHandlers();
+    initAuthModalHandlers();
   }
 }
 
@@ -340,15 +392,10 @@ function handleUserLogin(email, name, role) {
   localStorage.setItem('iccb_user', JSON.stringify(state.user));
   updateUserUIElements();
 }
-
 function handleUserLogout() {
   state.user = null;
   localStorage.removeItem('iccb_user');
-  if (window.netlifyIdentity) {
-    netlifyIdentity.logout();
-  }
   updateUserUIElements();
-  showToast("🔓 안전하게 로그아웃되었습니다.", "success");
 }
 
 function updateUserUIElements() {
@@ -401,7 +448,7 @@ function switchAuthTab(tab) {
   }
 }
 
-function initMockAuthModalHandlers() {
+function initAuthModalHandlers() {
   DOM.authCloseBtn.addEventListener('click', closeAuthModal);
   DOM.authModal.addEventListener('click', (e) => {
     if (e.target === DOM.authModal) closeAuthModal();
@@ -413,7 +460,7 @@ function initMockAuthModalHandlers() {
     });
   });
   
-  DOM.authSubmitBtn.addEventListener('click', (e) => {
+  DOM.authSubmitBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     const email = DOM.authEmail.value.trim();
     const pass = DOM.authPass.value.trim();
@@ -424,18 +471,34 @@ function initMockAuthModalHandlers() {
       showToast("❌ 이메일과 비밀번호를 작성해주세요.", "error");
       return;
     }
-    
-    if (activeAuthTab === 'login') {
-      // Mock Login Successful
-      handleUserLogin(email, name || "정구영", "바리스타 연구원");
-      showToast(`🔑 환영합니다, ${name}님!`, "success");
+
+    if (auth) {
+      // Firebase Path
+      try {
+        if (activeAuthTab === 'login') {
+          await auth.signInWithEmailAndPassword(email, pass);
+          showToast(`🔑 환영합니다, ${auth.currentUser.displayName || email}님!`, "success");
+        } else {
+          const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+          await userCred.user.updateProfile({ displayName: name });
+          showToast(`🌟 신규 바리스타 연구원 ${name} 등록이 완료되었습니다.`, "success");
+        }
+        closeAuthModal();
+      } catch (err) {
+        showToast(`❌ 인증 실패: ${err.message}`, "error");
+      }
     } else {
-      // Mock signup
-      handleUserLogin(email, name, role);
-      showToast(`🌟 신규 바리스타 연구원 ${name} 등록이 완료되었습니다.`, "success");
+      // Mock Path
+      if (activeAuthTab === 'login') {
+        handleUserLogin(email, name || "정구영", "바리스타 연구원");
+        showToast(`🔑 환영합니다, ${name}님! (오프라인)`, "success");
+      } else {
+        handleUserLogin(email, name, role);
+        showToast(`🌟 신규 바리스타 연구원 ${name} 등록 완료 (오프라인)`, "success");
+      }
+      closeAuthModal();
     }
     
-    closeAuthModal();
     // Clear inputs
     DOM.authEmail.value = '';
     DOM.authPass.value = '';

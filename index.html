@@ -12,8 +12,10 @@
     <!-- Design System & Stylesheet -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- Netlify Identity Widget for Cloud Auth (Fulfills production requirement) -->
-    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Firebase SDK (Standard for GitHub Pages Authentication) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -541,7 +543,7 @@
             <div class="auth-header">
                 <div class="auth-logo">☕</div>
                 <h3 id="auth-modal-title" class="auth-title">Coffee Lab Identity</h3>
-                <p class="auth-subtitle">ICCB 가상 인증 브릿지 (Netlify Identity 호환)</p>
+                <p class="auth-subtitle">ICCB 클라우드 인증 (GitHub Pages 호환)</p>
             </div>
             
             <div class="auth-tabs">

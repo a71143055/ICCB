@@ -25,12 +25,13 @@ Ideal Coffee Chat Blog
 3. 블로그 디자인 환경
 ================================================================
 1) 개발환경 : Google Antigravity IDE
-2) 구현환경 : NETLIFY
-3) 로그인 환경 : NETLIFY 에 의한 로그인 및 회원가입으로 등록 가능 - 중복 차단
-4) 로그인 및 소개 라인 : 소개 / 프로필 작성 / 회원 가입 / 로그인
-5) 분야 구성 바 : 주류 & 젤리 에스프레소 / 과일 & 채소 - 스무디 & 케이크 / 특색 케이크
-6) 등록된 사람들의 분야별 문서 등록 창 : 분야 구성 바 선택시 들어가게 되어 있음.
-7) 문서 작성 페이지 : 들어가서 구글 문서 시스템을 기반으로 정리하고 공유할 수 있음.
+2) 구현환경 : GitHub Pages (Static Hosting)
+3) 로그인 환경 : Firebase Authentication 기반 클라우드 로그인 및 회원가입 - 중복 차단 및 보안 강화
+4) 데이터베이스 : Firebase Firestore (NoSQL 클라우드 데이터베이스)
+5) 로그인 및 소개 라인 : 소개 / 프로필 작성 / 회원 가입 / 로그인
+6) 분야 구성 바 : 주류 & 젤리 에스프레소 / 과일 & 채소 - 스무디 & 케이크 / 특색 케이크
+7) 등록된 사람들의 분야별 문서 등록 창 : 분야 구성 바 선택시 들어가게 되어 있음.
+8) 문서 작성 페이지 : 들어가서 구글 문서 시스템을 기반으로 정리하고 공유할 수 있음.
 ================================================================
 4. 목표
 ================================================================
@@ -60,18 +61,18 @@ ICCB는 로컬 개발을 위해 초경량 파이썬 웹 서버를 제공합니�
    - 문서를 작성하고 등록하면 브라우저의 LocalStorage뿐만 아니라, 파이썬 서버의 파일 시스템 API를 호출하여 `data/documents.json` 파일에 즉시 영구적으로 동기화 저장됩니다.
 
 ================================================================
-6. NETLIFY 배포 및 클라우드 가이드 (Production Deployment)
+6. GitHub Pages 배포 및 클라우드 가이드 (Production Deployment)
 ================================================================
-본 플랫폼은 프론트엔드가 고성능 정적 파일(Semantic HTML5, CSS3, ES6 Javascript)로 분리 설계되어 있어, Netlify와 같은 클라우드 환경에 드래그 앤 드롭 또는 깃허브 연동으로 1초 만에 무료 배포할 수 있습니다.
+본 플랫폼은 프론트엔드가 고성능 정적 파일로 설계되어 있어, GitHub Pages를 통해 무료로 호스팅할 수 있습니다.
 
 1) 배포 프로세스 :
    - 이 소스코드를 GitHub 레포지토리에 푸시합니다.
-   - Netlify 계정을 만들고 [Add new site] -> [Import an existing project]를 통해 레포지토리를 연동합니다.
-   - 빌드 설정(Build Settings)은 공백으로 둡니다. (정적 배포이므로 별도의 빌드가 필요 없습니다.)
-   - 배포가 완료되면 Netlify가 무료 SSL 보안 주소(*.netlify.app)를 즉시 부여합니다.
+   - GitHub 레포지토리 [Settings] -> [Pages] -> [Build and deployment]에서 소스를 `GitHub Actions`로 설정하거나 `main` 브랜치를 선택합니다.
+   - 제공되는 `.github/workflows/deploy.yml` 파일을 통해 자동으로 빌드 및 배포가 수행됩니다.
 
-2) Netlify Identity (로그인/회원가입) 활성화 :
-   - 배포된 사이트 대시보드에서 [Site configuration] -> [Identity]로 이동하여 [Enable Identity]를 활성화합니다.
-   - [Registration preferences]에서 회원가입을 Open(누구나 가입 가능) 또는 Invite-only(초대된 사람만 가입 가능)로 선택합니다.
-   - [Services] -> [Git Gateway]를 연동하여 활성화합니다.
-   - 이제 배포된 웹사이트에서 '로그인 / 가입' 버튼을 누르면 Netlify Identity 클라우드 위젯이 팝업으로 나타나 중복 가입 차단 및 안전한 로그인이 정상 작동합니다!
+2) Firebase (로그인/회원가입) 활성화 :
+   - [Firebase Console](https://console.firebase.google.com/)에서 프로젝트를 생성합니다.
+   - [Authentication] 메뉴에서 '이메일/비밀번호' 로그인을 활성화합니다.
+   - [Firestore Database]를 생성하고 '프로덕션 모드' 또는 '테스트 모드'로 시작합니다.
+   - `app.js` 상단의 `firebaseConfig` 객체에 본인의 Firebase SDK 설정값을 복사하여 붙여넣습니다.
+   - 이제 GitHub Pages에서도 실제 로그인과 데이터 저장이 가능해집니다!
