@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>ICCB : Ideal Coffee Chat Blog | 커피 연금술 실험실</title>
+    <meta name="description" content="정구영의 커피 창업 및 브루잉 리서치 블로그. 에스프레소 연금술, 자연주의 스무디, 특색 케이크 미학을 탐구하는 레트로-퓨처리스트 커피 연구소.">
+    <meta name="author" content="정구영">
+    
+    <!-- Design System & Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Netlify Identity Widget for Cloud Auth (Fulfills production requirement) -->
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         GLASS NAV BAR
+         ========================================================================== -->
+    <header class="header-glass">
+        <div class="container header-inner">
+            <a href="#" onclick="switchSection('home'); return false;" class="logo-wrap" id="brand-logo">
+                <span class="logo-icon">☕</span>
+                <div>
+                    <h1 class="logo-text">ICCB</h1>
+                    <span class="logo-sub">Coffee Alchemy Lab</span>
+                </div>
+            </a>
+            
+            <div class="nav-actions">
+                <div id="userStatus">
+                    <!-- Loaded dynamically via app.js -->
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">☕ 커피 향 가득한 공간</span>
+                </div>
+                <button id="loginBtn" class="btn btn-primary" aria-label="로그인 및 가입">로그인 / 가입</button>
+                <button id="themeToggleBtn" class="btn theme-toggle-btn" aria-label="테마 전환">☀️</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- ==========================================================================
+             CATEGORY NAVIGATION BAR (분야 구성 바)
+             ========================================================================== -->
+        <nav class="category-bar" aria-label="메인 카테고리 구성">
+            <ul class="category-list">
+                <li class="category-tab active" data-category="home" id="tab-home">
+                    <span class="tab-title">실험실 입구</span>
+                    <span class="tab-subtitle">Lab Entrance</span>
+                </li>
+                <li class="category-tab" data-category="alcohol-jelly" id="tab-alchemy">
+                    <span class="tab-title">에스프레소 연금술</span>
+                    <span class="tab-subtitle">Alchemy Lab</span>
+                </li>
+                <li class="category-tab" data-category="fruit-veg" id="tab-botanical">
+                    <span class="tab-title">자연주의 브루잉</span>
+                    <span class="tab-subtitle">Botanical Lab</span>
+                </li>
+                <li class="category-tab" data-category="specialty-cake" id="tab-patisserie">
+                    <span class="tab-title">특색 케이크 미학</span>
+                    <span class="tab-subtitle">Patisserie Lab</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- ==========================================================================
+             VIEWPORT: HOME PAGE (INTRO, PROFILE, GOALS, SIMULATOR)
+             ========================================================================== -->
+        <section id="view-home" class="view-section active">
+            
+            <!-- Intro Panel & Real Cafe Photo Grid -->
+            <div class="intro-grid">
+                
+                <!-- Main Greeting Panel -->
+                <article class="intro-panel">
+                    <span class="intro-tag">// Project ICCB v1.0</span>
+                    <h2 class="intro-title">에스프레소 혁신과<br>브루잉 예술의 결합</h2>
+                    <p class="intro-desc">
+                        Ideal Coffee Chat Blog(ICCB)는 기존의 고정관념을 뛰어넘는 커피 배합 및 신규 디저트 아이디어를 정리하고 공유하는 실존적 커피 연구 공간입니다. 
+                        바리스타로서의 첫 걸음이자 에스프레소 바/랩 창업을 위한 실제적 실험 레포트들이 이곳에 아카이빙됩니다.
+                    </p>
+                    <div class="intro-meta-bar">
+                        <div>
+                            <span class="meta-item-lbl">연구 총괄</span>
+                            <div class="meta-item-val" style="color: var(--accent-glow);">정구영 (Gu-Yeong)</div>
+                        </div>
+                        <div>
+                            <span class="meta-item-lbl">개발 환경</span>
+                            <div class="meta-item-val">Python / HTML5</div>
+                        </div>
+                        <div>
+                            <span class="meta-item-lbl">인프라 구축</span>
+                            <div class="meta-item-val">Netlify CI/CD</div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Cafe Interior Photo Card (Makes it feel like a real physical cafe!) -->
+                <aside class="profile-card" style="padding: 0; overflow: hidden; justify-content: flex-start; align-items: stretch; border-color: var(--accent);">
+                    <div style="height: 180px; width: 100%; position: relative; overflow: hidden;">
+                        <img src="assets/cafe_interior.png" alt="ICCB 커피 랩 실제 전경" style="width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 12px 20px; color: #fff;">
+                            <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-glow); text-transform: uppercase; letter-spacing: 1px;">Physical Space</span>
+                            <h4 style="font-family: var(--font-heading); font-size: 1.1rem; margin-top: 2px;">ICCB 테이스팅 룸</h4>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+                            "따뜻한 원목 가구와 초록빛 식물들, 그리고 구리로 빛나는 하이엔드 에스프레소 기기들이 살아 숨 쉬는 공간입니다."
+                        </p>
+                        <button onclick="document.getElementById('brewing-simulator').scrollIntoView({behavior: 'smooth'})" class="btn btn-secondary" style="font-size: 0.75rem; padding: 5px 12px; font-weight: 600;">🧪 가상 바 시뮬레이터 구동</button>
+                    </div>
+                </aside>
+                
+            </div>
+
+            <!-- Author Profile Card Row (Sleek and professional) -->
+            <div class="goals-section" style="margin-top: 30px; margin-bottom: 45px;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 25px 35px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; box-shadow: var(--shadow-neon);">
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="profile-avatar" style="width: 70px; height: 70px; margin-bottom: 0; font-size: 2.2rem; box-shadow: 0 0 15px rgba(var(--accent-glow-rgb), 0.25);">🧑‍🔬</div>
+                        <div>
+                            <h3 class="profile-name" style="margin-bottom: 2px;">정구영 <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-glow); margin-left: 10px; text-transform: uppercase; font-weight: bold;">Chief Barista & Founder</span></h3>
+                            <p style="font-size: 0.88rem; color: var(--text-secondary); max-width: 600px;">
+                                "기술에 대한 스스로의 한계를 개척하고, 커피를 사랑하는 사람들과 원활하게 소통하며 본 에스프레소 바의 진정한 가치를 증명합니다."
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 30px; border-left: 1px solid var(--border-color); padding-left: 30px;">
+                        <div class="stat-item" style="text-align: center;">
+                            <span id="stat-posts-count" class="stat-num" style="font-size: 1.5rem;">0</span>
+                            <span class="stat-lbl">실험 레포트</span>
+                        </div>
+                        <div class="stat-item" style="text-align: center;">
+                            <span id="stat-avg-rating" class="stat-num" style="font-size: 1.5rem; color: var(--accent-glow);">0.0</span>
+                            <span class="stat-lbl">평균 만족도</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Goals Grid -->
+            <section class="goals-section">
+                <div class="section-title-wrap">
+                    <h3 class="section-title">🧪 ICCB <span>연구 목표 및 철학</span></h3>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">// Project Milestones</span>
+                </div>
+                
+                <div class="goals-grid">
+                    <div class="goal-card">
+                        <span class="goal-icon">💰</span>
+                        <span class="goal-num">01</span>
+                        <h4 class="goal-name">경제 자립</h4>
+                        <p class="goal-desc">배움의 한계를 넘어 창의적인 아이디어를 통한 수익 모델을 발굴합니다.</p>
+                    </div>
+                    <div class="goal-card">
+                        <span class="goal-icon">🎯</span>
+                        <span class="goal-num">02</span>
+                        <h4 class="goal-name">취미 & 아르바이트</h4>
+                        <p class="goal-desc">즐거운 취미 활동을 넘어선 실질적인 경제 수단이자 가치를 획득합니다.</p>
+                    </div>
+                    <div class="goal-card">
+                        <span class="goal-icon">🔬</span>
+                        <span class="goal-num">03</span>
+                        <h4 class="goal-name">바리스타 기술 증진</h4>
+                        <p class="goal-desc">에스프레소 압력, 입도 제어 등 정밀 브루잉 과학 기술을 독자 개척합니다.</p>
+                    </div>
+                    <div class="goal-card">
+                        <span class="goal-icon">🤝</span>
+                        <span class="goal-num">04</span>
+                        <h4 class="goal-name">소통 및 회원 모집</h4>
+                        <p class="goal-desc">바리스타, 커피 알케미스트들과의 자유로운 레시피 평론 및 소통망 구축.</p>
+                    </div>
+                    <div class="goal-card">
+                        <span class="goal-icon">🏬</span>
+                        <span class="goal-num">05</span>
+                        <h4 class="goal-name">에스프레소 바 창업</h4>
+                        <p class="goal-desc">블로그 축적 아이디어를 집약한 복합 오프라인 테이스팅 룸/에스프레소 바 실현.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Cafe Menu Showcase -->
+            <section class="goals-section" style="margin-bottom: 50px;">
+                <div class="section-title-wrap">
+                    <h3 class="section-title">🍰 ICCB <span>금일의 시그니처 랩 메뉴</span></h3>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-warm);">// Cafe Signature Menu</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+                    <!-- Menu 1 -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-neon); transition: var(--transition-smooth); display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='var(--accent-glow)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-color)'">
+                        <div style="height: 180px; overflow: hidden; position: relative;">
+                            <img src="assets/espresso_martini.png" alt="에스프레소 마티니" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 12px; right: 12px; background: rgba(0,229,255,0.9); color: #000; font-family: var(--font-mono); font-weight: bold; font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; text-transform: uppercase;">Espresso Lab</span>
+                        </div>
+                        <div style="padding: 20px; display: flex; flex-direction: column; flex: 1;">
+                            <h4 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 6px;">에스프레소 마티니</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 15px; flex: 1;">
+                                보드카의 차가움과 갓 추출한 더블 샷 에스프레소의 고밀도 크레마가 융합된 나이트 캡 음료.
+                            </p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: bold; color: var(--accent-glow);">91.5°C 추출</span>
+                                <button onclick="switchSection('alcohol-jelly'); setTimeout(() => viewDocumentDetail('1'), 200);" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px; font-weight: 600;">상세 레시피</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu 2 -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-neon); transition: var(--transition-smooth); display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='var(--accent-botanical)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-color)'">
+                        <div style="height: 180px; overflow: hidden; position: relative;">
+                            <img src="assets/green_smoothie.png" alt="고수 스무디" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 12px; right: 12px; background: rgba(0,255,136,0.9); color: #000; font-family: var(--font-mono); font-weight: bold; font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; text-transform: uppercase;">Botanical Lab</span>
+                        </div>
+                        <div style="padding: 20px; display: flex; flex-direction: column; flex: 1;">
+                            <h4 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 6px;">허브 고수 스무디</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 15px; flex: 1;">
+                                신선한 고수와 사과, 완숙 바나나의 산뜻한 당분이 융합하여 기분 좋은 초록색 디톡스를 선사하는 웰빙 스무디.
+                            </p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: bold; color: var(--accent-botanical);">시트러스 향</span>
+                                <button onclick="switchSection('fruit-veg'); setTimeout(() => viewDocumentDetail('2'), 200);" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px; font-weight: 600;">상세 레시피</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu 3 -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-neon); transition: var(--transition-smooth); display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='var(--accent-warm)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--border-color)'">
+                        <div style="height: 180px; overflow: hidden; position: relative;">
+                            <img src="assets/waterfall_cake.png" alt="워터폴 케이크" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 12px; right: 12px; background: rgba(255,123,0,0.9); color: #000; font-family: var(--font-mono); font-weight: bold; font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; text-transform: uppercase;">Patisserie Lab</span>
+                        </div>
+                        <div style="padding: 20px; display: flex; flex-direction: column; flex: 1;">
+                            <h4 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 6px;">별빛이 내리는 워터폴 케이크</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 15px; flex: 1;">
+                                맑고 탱글한 그라데이션 푸른 한천 젤리 내부에 금박 가루를 흩뿌려 은하수가 흐르는 계곡을 형상화한 양갱 예술 케이크.
+                            </p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: bold; color: var(--accent-warm);">양갱 아트 무스</span>
+                                <button onclick="switchSection('specialty-cake'); setTimeout(() => viewDocumentDetail('3'), 200);" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px; font-weight: 600;">상세 레시피</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Alchemist Extraction Simulator -->
+            <section class="simulator-section" id="brewing-simulator">
+                <div class="section-title-wrap">
+                    <h3 class="section-title">⚙️ 에스프레소 <span>열역학 추출 시뮬레이터</span></h3>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-glow);">// Interactive Telemetry</span>
+                </div>
+                
+                <div class="simulator-panel">
+                    <div class="sim-grid">
+                        
+                        <!-- Controls Pane -->
+                        <div class="sim-controls">
+                            <div style="margin-bottom: 5px;">
+                                <h4 style="font-size: 1.1rem; margin-bottom: 5px;">가상 추출 랩 기기 세팅</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">원두 분쇄 입도와 추출 비율, 헤드 가압 수온을 조절해 극상의 크레마 샷을 당겨 보세요.</p>
+                            </div>
+                            
+                            <!-- Slider 1: Grind Size -->
+                            <div class="control-group">
+                                <div class="control-label-wrap">
+                                    <span class="control-title">분쇄 입도 (Grind Size)</span>
+                                    <span id="val-grind" class="control-value">#12</span>
+                                </div>
+                                <input type="range" id="sim-grind" min="1" max="30" value="12" class="sim-slider" aria-label="분쇄 입도 조정">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                                    <span>Fine (에스프레소)</span>
+                                    <span>Coarse (핸드드립)</span>
+                                </span>
+                            </div>
+                            
+                            <!-- Slider 2: Brew Ratio -->
+                            <div class="control-group">
+                                <div class="control-label-wrap">
+                                    <span class="control-title">에스프레소 추출 비율 (Brew Ratio)</span>
+                                    <span id="val-ratio" class="control-value">1:2.0</span>
+                                </div>
+                                <input type="range" id="sim-ratio" min="1.0" max="5.0" step="0.1" value="2.0" class="sim-slider" aria-label="추출 비율 조정">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                                    <span>Ristretto (1:1.5)</span>
+                                    <span>Lungo (1:3.0)</span>
+                                </span>
+                            </div>
+                            
+                            <!-- Slider 3: Water Temp -->
+                            <div class="control-group">
+                                <div class="control-label-wrap">
+                                    <span class="control-title">보일러 추출 수온 (Temperature)</span>
+                                    <span id="val-temp" class="control-value">92°C</span>
+                                </div>
+                                <input type="range" id="sim-temp" min="80" max="98" value="92" class="sim-slider" aria-label="보일러 온도 조정">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                                    <span>Cold Extraction</span>
+                                    <span>Boiling Burn</span>
+                                </span>
+                            </div>
+                            
+                            <!-- Extraction Trigger Button -->
+                            <button id="pullShotBtn" class="btn btn-primary" style="padding: 15px; font-size: 1.05rem; justify-content: center; margin-top: 10px;">
+                                🧪 시그니처 샷 추출 (Pull Shot)
+                            </button>
+                        </div>
+                        
+                        <!-- Visual Display / Simulator Machine -->
+                        <div class="sim-display">
+                            
+                            <div class="machine-chamber">
+                                <div class="portafilter">
+                                    <div class="portafilter-handle"></div>
+                                </div>
+                                <div id="steamParticle" class="machine-steam"></div>
+                                <div id="espressoStream" class="espresso-stream"></div>
+                                <div class="cup-graphic">
+                                    <div id="cupLiquid" class="cup-liquid"></div>
+                                </div>
+                                <div class="cup-handle"></div>
+                            </div>
+                            
+                            <!-- Live Dashboard Telemetry Screen -->
+                            <div class="sim-telemetry-overlay">
+                                <div class="telemetry-node" style="border-right: 1px solid var(--border-color);">
+                                    <div class="telemetry-lbl">STATUS</div>
+                                    <div id="sim-status" class="telemetry-val" style="color: var(--accent);">READY</div>
+                                </div>
+                                <div class="telemetry-node" style="border-right: 1px solid var(--border-color);">
+                                    <div class="telemetry-lbl">BREW TIME</div>
+                                    <div id="sim-time" class="telemetry-val" style="color: var(--accent-glow);">0s</div>
+                                </div>
+                                <div class="telemetry-node">
+                                    <div class="telemetry-lbl">QUALITY</div>
+                                    <div id="sim-quality" class="telemetry-val">---</div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Dynamic Feedback Card -->
+                    <div id="extractionReport" class="extraction-report">
+                        <h5 id="report-title-text" class="report-title">🌟 황금빛 크레마의 신의 샷 (God Shot)</h5>
+                        <p id="report-desc" class="report-desc">분쇄도와 에스프레소 비율이 황금 비율을 만족하여 최상의 샷이 완성되었습니다.</p>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button id="createFromExtractionBtn" class="btn btn-primary" style="font-size: 0.8rem; padding: 6px 12px;">
+                                📋 이 데이터로 새 실험 레포트 생성 (Auto-Create Report)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- ==========================================================================
+             VIEWPORT: FEED PAGE (분야별 문서 등록 창)
+             ========================================================================= -->
+        <section id="view-feed" class="view-section">
+            <div class="feed-header">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px;">
+                    <div>
+                        <h2 id="feed-title" class="section-title">🔬 <span>Alchemy Lab</span> : 에스프레소 연금술</h2>
+                        <p id="feed-subtitle" style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 5px;">주류 에스프레소 및 젤리 에스프레소 등 창의적 레시피 아카이브</p>
+                    </div>
+                    <button id="writeDocBtn" class="btn btn-primary" style="display: none;">
+                        🧪 새 실험 문서 등록 (New Log)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Cards Grid -->
+            <div id="document-grid" class="document-grid">
+                <!-- Injected dynamically via app.js -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEWPORT: DETAIL VIEW (상세 레포트 보기)
+             ========================================================================== -->
+        <section id="view-detail" class="view-section">
+            <div style="margin-bottom: 20px;">
+                <button id="backToFeedBtn" class="btn btn-secondary">◀ 리서치 피드로 돌아가기</button>
+            </div>
+            
+            <div class="intro-panel" style="padding: 40px; box-shadow: var(--shadow-neon);" id="article-container">
+                <!-- Injected dynamically via app.js -->
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             VIEWPORT: WRITE & LIVE PREVIEW (Google Docs-like System)
+             ========================================================================== -->
+        <section id="view-write" class="view-section">
+            <div class="section-title-wrap" style="margin-bottom: 30px;">
+                <h2 class="section-title">📝 <span>Google Docs</span> : 브루잉 실험 보고서 편집</h2>
+                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-glow);">// Distraction-Free Editor</span>
+            </div>
+            
+            <div class="editor-layout">
+                
+                <!-- Editing Form -->
+                <form id="docForm" class="editor-form-pane" novalidate>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px;">
+                        🔬 실험 메타데이터 기록
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="editor-title">보고서 제목 (Report Title)</label>
+                        <input type="text" id="editor-title" class="form-input" placeholder="예: 극상의 벨벳 크레마, Kahlua Latte의 열역학 밸런스 분석" required autocomplete="off">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editor-category">연구 분야 선택 (Lab Area)</label>
+                            <select id="editor-category" class="form-select">
+                                <option value="alcohol-jelly">에스프레소 연금술 (Alchemy Lab)</option>
+                                <option value="fruit-veg">자연주의 브루잉 (Botanical Lab)</option>
+                                <option value="specialty-cake">특색 케이크 미학 (Patisserie Lab)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editor-item-type">음료/디저트 상세 종류 (Subtype)</label>
+                            <select id="editor-item-type" class="form-select">
+                                <option value="주류 에스프레소">주류 에스프레소 (Irish Coffee, Kahlua)</option>
+                                <option value="과일 & 채소 스무디">과일 & 채소 스무디 (Cilantro, Truffle)</option>
+                                <option value="젤리 에스프레소">젤리 에스프레소 (Coffee Yanggeng)</option>
+                                <option value="치즈 케이크">치즈 케이크 (Gorgonzola, Truffle)</option>
+                                <option value="양갱 아트 케이크">양갱 아트 케이크 (Waterfall Art)</option>
+                                <option value="과일 & 채소 케이크">과일 & 채소 케이크 (Matcha, Durian)</option>
+                                <option value="주류 케이크">주류 케이크 (Bailey's Cake)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editor-tags">검색 태그 (Tags) <span style="text-transform: none; color: var(--text-muted);">(콤마로 구분)</span></label>
+                        <input type="text" id="editor-tags" class="form-input" placeholder="예: 창업, 아방가르드, 디톡스, 시그니처" autocomplete="off">
+                    </div>
+                    
+                    <!-- Brew Telemetry Parameters -->
+                    <div class="form-group">
+                        <label>정밀 물리/화학 랩 계측 세팅 (Brew Telemetry)</label>
+                        <div class="telemetry-form-grid">
+                            <div class="telemetry-input-wrap">
+                                <label for="editor-temp">수온(°C)</label>
+                                <input type="number" id="editor-temp" class="form-input" value="92" min="0" max="100" required>
+                            </div>
+                            <div class="telemetry-input-wrap">
+                                <label for="editor-grind">분쇄 입도</label>
+                                <input type="text" id="editor-grind" class="form-input" value="12" placeholder="1-30" required>
+                            </div>
+                            <div class="telemetry-input-wrap">
+                                <label for="editor-ratio">추출 비율</label>
+                                <input type="text" id="editor-ratio" class="form-input" value="1:2.0" placeholder="1:2.0" required>
+                            </div>
+                            <div class="telemetry-input-wrap">
+                                <label for="editor-time">시간(초)</label>
+                                <input type="number" id="editor-time" class="form-input" value="28" min="0" required>
+                            </div>
+                            <div class="telemetry-input-wrap">
+                                <label for="editor-rating">만족도(★)</label>
+                                <input type="number" id="editor-rating" class="form-input" value="4.8" min="1.0" max="5.0" step="0.1" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+                        <label for="editor-content" style="display: flex; justify-content: space-between;">
+                            <span>보고서 본문 기술 (Markdown 지원)</span>
+                            <span style="text-transform: none; color: var(--accent-glow); font-size: 0.65rem;">### Heading, **Bold**, - Bullet</span>
+                        </label>
+                        <textarea id="editor-content" class="form-input form-textarea" style="flex: 1; min-height: 250px; resize: vertical; font-family: var(--font-ui);" placeholder="### 1. 아이디어 제안 배경&#10;[여기에 배경 내용을 입력하세요...]&#10;&#10;### 2. 준비 재료&#10;- 재료 1&#10;- 재료 2&#10;&#10;### 3. 상세 레시피&#10;1. 첫 단계&#10;2. 둘째 단계" required></textarea>
+                    </div>
+                    
+                    <div class="editor-actions">
+                        <button type="button" id="cancelWriteBtn" class="btn btn-secondary">작성 취소</button>
+                        <button type="submit" class="btn btn-primary">🧪 실험 보고서 등록 & 동기화</button>
+                    </div>
+                </form>
+                
+                <!-- Live Preview Pane -->
+                <div class="editor-preview-pane">
+                    <span class="preview-watermark">Live Printing Preview</span>
+                    <div id="preview-container" style="padding-top: 15px;">
+                        <div id="preview-category" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 5px;">// CATEGORY</div>
+                        <h2 id="preview-title" style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 4px; line-height: 1.25;">지정되지 않은 실험 보고서 제목</h2>
+                        <div id="preview-type" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Type: ---</div>
+                        
+                        <div id="preview-telemetry">
+                            <!-- Telemetry state rendered dynamically -->
+                        </div>
+                        
+                        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                        
+                        <div id="preview-body" class="preview-body-content" style="font-size: 0.95rem; line-height: 1.7; color: var(--text-primary);">
+                            <!-- Body text dynamically parsed -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         FOOTER
+         ========================================================================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">ICCB : Ideal Coffee Chat Blog</div>
+            <p>경제 자립 / 기술 혁신 / 에스프레소 바 카페 창업 로드맵</p>
+            <div class="footer-links">
+                <a href="#brewing-simulator" onclick="switchSection('home'); return true;">에스프레소 시뮬레이터</a>
+                <span>•</span>
+                <a href="https://identity.netlify.com/" target="_blank" rel="noopener">Netlify Identity Widget</a>
+                <span>•</span>
+                <a href="#" onclick="alert('정구영 2026. ICCB 연구 기록 아카이브.'); return false;">저작권 안내</a>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-muted);">
+                Compiled and Served via Local Python Server & Static Client Bundle
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         MOCK NETLIFY AUTHENTICATION POPUP MODAL
+         ========================================================================== -->
+    <div id="authModal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="auth-modal-title">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="authCloseBtn" aria-label="닫기">×</button>
+            
+            <div class="auth-header">
+                <div class="auth-logo">☕</div>
+                <h3 id="auth-modal-title" class="auth-title">Coffee Lab Identity</h3>
+                <p class="auth-subtitle">ICCB 가상 인증 브릿지 (Netlify Identity 호환)</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="login">로그인</button>
+                <button class="auth-tab-btn" data-tab="signup">신규 바리스타 가입</button>
+            </div>
+            
+            <form class="auth-form" novalidate>
+                <div class="form-group">
+                    <label for="authEmail">이메일 주소</label>
+                    <input type="email" id="authEmail" class="form-input" placeholder="barista@coffeelab.com" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="authPass">비밀번호</label>
+                    <input type="password" id="authPass" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                
+                <div class="form-group" id="authNameGroup" style="display: none;">
+                    <label for="authName">바리스타 연구원 이름</label>
+                    <input type="text" id="authName" class="form-input" placeholder="정구영" autocomplete="name">
+                </div>
+                
+                <div class="form-group" id="authRoleGroup" style="display: none;">
+                    <label for="authRole">연구원 전문 분야 (Role)</label>
+                    <select id="authRole" class="form-select">
+                        <option value="Chief Alchemist">Chief Alchemist (주류 융합)</option>
+                        <option value="Botanical Alchemist">Botanical Alchemist (채소/과일)</option>
+                        <option value="Artisan Pâtissier">Artisan Pâtissier (디저트/제과)</option>
+                        <option value="Coffee Hobbyist">Coffee Hobbyist (취미 및 소통)</option>
+                    </select>
+                </div>
+                
+                <button type="submit" id="authSubmitBtn" class="btn btn-primary auth-submit-btn">로그인</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Toast Notifications Overlay -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Core Logic Client Application -->
+    <script src="app.js"></script>
+</body>
+</html>
